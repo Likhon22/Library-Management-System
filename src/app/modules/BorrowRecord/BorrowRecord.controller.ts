@@ -31,11 +31,21 @@ const returnBorrowRecord = catchAsync(async (req: Request, res: Response) => {
     success: true,
   });
 });
+const overdueBorrowRecord = catchAsync(async (req: Request, res: Response) => {
+  const result = await BorrowRecordService.overdueBorrowRecordFromDB();
+  sendResponse(res, {
+    message: 'Overdue borrow record retrieved successfully',
+    data: result,
+    statusCode: 200,
+    success: true,
+  });
+});
 
 const BorrowRecordControllers = {
   createBorrowRecord,
   getBorrowRecords,
   returnBorrowRecord,
+  overdueBorrowRecord,
 };
 
 export default BorrowRecordControllers;

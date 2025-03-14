@@ -17,5 +17,6 @@ router.post(
   validateRequest(borrowRecordValidation.borrowRecordReturnValidationSchema),
   BorrowRecordControllers.returnBorrowRecord,
 );
+router.get('/overdue', BorrowRecordControllers.overdueBorrowRecord);
 
 export const borrowRecordRoutes = router;

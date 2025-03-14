@@ -15,9 +15,11 @@ const createBorrowRecordIntoDB = async (payload: BorrowRecord) => {
       memberId: payload.memberId,
     },
   });
+
   if (!isMemberExist) {
     throw new Error('Member not found');
   }
+
   const result = await prisma.borrowRecord.create({
     data: payload,
   });
@@ -54,10 +56,39 @@ const returnBorrowRecordIntoDB = async (
   });
   return result;
 };
+
+const overdueBorrowRecordFromDB = async () => {
+  const result = await prisma.borrowRecord.findMany({
+    where: {
+      borrowDate: {
+        lte: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
+      },
+    },
+  });
+
+  // Calculate overdue time for each record
+  const resultWithOverdueTime =
+    result.length > 0
+      ? result.map(record => {
+          const currentDate = new Date().getTime();
+          const borrowDate = new Date(record.borrowDate).getTime();
+          const diffTime = currentDate - borrowDate;
+
+          const overdueTime = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+          const overDueDays = overdueTime - 14;
+          if (overDueDays < 0) {
+            return { ...record, message: 'No overdue borrow records found' };
+          }
+          return { ...record, overDueDays };
+        })
+      : { result, message: 'No overdue borrow records found' };
+  return resultWithOverdueTime;
+};
 const BorrowRecordService = {
   createBorrowRecordIntoDB,
   getBorrowRecordFromDB,
   returnBorrowRecordIntoDB,
+  overdueBorrowRecordFromDB,
 };
 
 export default BorrowRecordService;
