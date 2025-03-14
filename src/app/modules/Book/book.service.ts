@@ -34,11 +34,29 @@ const updateBookInDB = async (
   });
   return result;
 };
+
+const deleteBookFromDB = async (bookId: string) => {
+  const isBookExist = await prisma.book.findUniqueOrThrow({
+    where: {
+      id: bookId,
+    },
+  });
+  if (!isBookExist) {
+    throw new Error('Book not found');
+  }
+  const result = await prisma.book.delete({
+    where: {
+      id: bookId,
+    },
+  });
+  return result;
+};
 const bookServices = {
   createBookIntoDB,
   getBooksFromDB,
   getSingleBookFromDB,
   updateBookInDB,
+  deleteBookFromDB,
 };
 
 export default bookServices;

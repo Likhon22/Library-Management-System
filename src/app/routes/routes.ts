@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { bookRoutes } from '../modules/Book/book.routes';
+import { memberRoutes } from '../modules/member/member.routes';
 
 const routes = Router();
 type TRoutes = {
@@ -10,6 +11,10 @@ const moduleRoutes: TRoutes[] = [
   {
     path: '/books',
     routes: bookRoutes,
+  },
+  {
+    path: '/member',
+    routes: memberRoutes,
   },
 ];
 
