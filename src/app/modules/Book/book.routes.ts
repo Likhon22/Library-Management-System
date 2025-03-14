@@ -11,4 +11,13 @@ router.post(
   bookControllers.createBook,
 );
 
+router.get('/', bookControllers.getBooks);
+
+router.get('/:bookId', bookControllers.getSingleBook);
+router.put(
+  '/:bookId',
+  validateRequest(bookValidations.updateBookValidationSchema),
+  bookControllers.updateBook,
+);
+
 export const bookRoutes = router;

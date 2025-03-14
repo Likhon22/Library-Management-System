@@ -10,8 +10,18 @@ const createBookValidationSchema = z.object({
   }),
 });
 
+const updateBookValidationSchema = z.object({
+  body: z.object({
+    title: z.string().optional(),
+    genre: z.string().optional(),
+    publishedYear: z.number().optional(),
+    totalCopies: z.number().optional(),
+    availableCopies: z.number().optional(),
+  }),
+});
 const bookValidations = {
   createBookValidationSchema,
+  updateBookValidationSchema,
 };
 
 export default bookValidations;
